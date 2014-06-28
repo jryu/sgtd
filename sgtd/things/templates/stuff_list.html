@@ -10,11 +10,18 @@ Stuff
 {% endblock %}
 
 {% block content %}
-<ul data-role="listview">
+<form action='{% url "stuff_list" %}' method='post'>{% csrf_token %}
+<ul data-role="listview" data-inset="true">
+  <li class="ui-field-contain">
+    <input maxlength="128" name="text" type="text" placeholder="New stuff" value="" />
+    <button class="ui-shadow ui-btn ui-corner-all" type="submit">Add</button>
+  </li>
+
 {% for stuff in object_list %}
   <li>{{ stuff }}</li>
 {% endfor %}
 </ul>
+</form>
 {% endblock %}
 
 {% block footer %}
