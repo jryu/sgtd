@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 
 {% block title %}
-title
+Slow GTD
 {% endblock %}
 
 {% block header %}
-header
+<h1>Slow GTD</h1>
 {% endblock %}
 
 {% block content %}
-<button class="ui-btn ui-btn-icon-left ui-icon-plus">Stuff</button>
-<button class="ui-btn ui-btn-icon-left ui-icon-arrow-d">Review Stuff</button>
-<button class="ui-btn ui-btn-icon-left ui-icon-minus">Next Action</button>
-<button class="ui-btn ui-btn-icon-left ui-icon-arrow-u">Review Projects</button>
-<button class="ui-btn ui-btn-icon-left ui-icon-calendar">Calendar</button>
-<button class="ui-btn ui-btn-icon-left ui-icon-clock">Waiting for</button>
-<button class="ui-btn ui-btn-icon-left ui-icon-forward">Someday / Maybe</button>
+<a href="{% url 'stuff_list' %}" class="ui-btn ui-btn-icon-left ui-icon-plus">Stuff</a>
+<a href="#" class="ui-btn ui-btn-icon-left ui-icon-arrow-d">Review Stuff</a>
+<a href="#" class="ui-btn ui-btn-icon-left ui-icon-minus">Next Action</a>
+<a href="#" class="ui-btn ui-btn-icon-left ui-icon-arrow-u">Review Projects</a>
+<a href="#" class="ui-btn ui-btn-icon-left ui-icon-calendar">Calendar</a>
+<a href="#" class="ui-btn ui-btn-icon-left ui-icon-clock">Waiting for</a>
+<a href="#" class="ui-btn ui-btn-icon-left ui-icon-forward">Someday / Maybe</a>
 {% endblock %}
 
 {% block footer %}

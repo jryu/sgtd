@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Stuff
+{% endblock %}
+
+{% block header %}
+<h1>Stuff</h1>
+<a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Main</a>
+{% endblock %}
+
+{% block content %}
+<ul data-role="listview">
+{% for stuff in object_list %}
+  <li>{{ stuff }}</li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
