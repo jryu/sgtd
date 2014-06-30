@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1>Is It Actionable?</h1>
+<a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Main</a>
+{% endblock %}
+
+{% block content %}
+
+{% if stuff %}
+	<p>{{ stuff }} </p>
+	<form action='{% url "is_actionable" %}' method='post'>{% csrf_token %}
+	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="yes">Yes, it's actionable</button>
+	</form>
+
+	<form action='{% url "stuff_delete" stuff.pk %}' method='post'>{% csrf_token %}
+	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="never">Never</button>
+	</form>
+
+	<form action='{% url "is_actionable" %}' method='post'>{% csrf_token %}
+	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="maybe">Maybe actionable someday</button>
+	</form>
+{% else %}
+	<p>There is nothing to review.</p>
+{% endif %}
+
+{% endblock %}

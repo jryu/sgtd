@@ -7,4 +7,6 @@ urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name="main_page.html"),
         name='main'),
     url(r'^stuff/$', views.StuffListView.as_view(), name='stuff_list'),
+    url(r'^stuff/is-actionable/$', views.IsActionableView.as_view(), name='is_actionable'),
+    url(r'^stuff/(?P<pk>\d+)/delete/$', views.StuffDeleteView.as_view(), name='stuff_delete'),
 )
