@@ -10,15 +10,15 @@
 {% if stuff %}
 	<p>{{ stuff }} </p>
 	<form action='{% url "is_actionable" %}' method='post'>{% csrf_token %}
-	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="yes">Yes, it's actionable</button>
+	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Yes, it's actionable</button>
 	</form>
 
 	<form action='{% url "stuff_delete" stuff.pk %}' method='post'>{% csrf_token %}
-	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="never">Never</button>
+	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Never</button>
 	</form>
 
-	<form action='{% url "is_actionable" %}' method='post'>{% csrf_token %}
-	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="maybe">Maybe actionable someday</button>
+	<form action='{% url "stuff_to_maybe" stuff.pk %}' method='post'>{% csrf_token %}
+	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Maybe actionable someday</button>
 	</form>
 {% else %}
 	<p>There is nothing to review.</p>

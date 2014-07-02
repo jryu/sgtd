@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     url(r'^stuff/$', views.StuffListView.as_view(), name='stuff_list'),
     url(r'^stuff/is-actionable/$', views.IsActionableView.as_view(), name='is_actionable'),
     url(r'^stuff/(?P<pk>\d+)/delete/$', views.StuffDeleteView.as_view(), name='stuff_delete'),
+    url(r'^stuff/(?P<pk>\d+)/maybe/$', views.StuffToMaybeView.as_view(), name='stuff_to_maybe'),
+    url(r'^maybe/$', views.MaybeListView.as_view(), name='maybe_list'),
 )

@@ -11,6 +11,7 @@ Stuff
 
 {% block content %}
 <form action='{% url "stuff_list" %}' method='post'>{% csrf_token %}
+<input name="category" type="hidden" value="s" />
 <ul data-role="listview" data-inset="true">
   <li class="ui-field-contain">
     <input maxlength="128" name="text" type="text" placeholder="New stuff" value="" />
