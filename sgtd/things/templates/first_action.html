@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+First Action
+{% endblock %}
+
+{% block header %}
+<h1>First Action</h1>
+<a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Main</a>
+{% endblock %}
+
+{% block content %}
+<p>What is the first action for <strong>{{ object }}</strong>?</p>
+<form action='{% url "first_action" object.pk %}' method="post">{% csrf_token %}
+	{{ form.non_field_errors }}
+	{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+	{% endfor %}
+	{% for field in form.visible_fields %}
+		{{ field.errors }}
+		{{ field }}
+	{% endfor %}
+	<button class="ui-shadow ui-btn ui-corner-all" type="submit">Save</button>
+</form>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

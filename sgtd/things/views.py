@@ -57,3 +57,16 @@ class MaybeListView(generic.ListView):
     def get_queryset(self):
         return Thing.objects.filter(
                 category=Thing.MAYBE).order_by('-datetime_create')
+
+
+class FirstActionView(generic.UpdateView):
+    model = Thing
+    fields = ['text']
+    template_name = 'first_action.html'
+
+    def form_valid(self, form):
+        form.instance.category = Thing.ACTION
+        return super(generic.UpdateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('is_actionable')
