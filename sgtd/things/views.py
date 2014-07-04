@@ -51,6 +51,14 @@ class StuffToMaybeView(generic.detail.SingleObjectMixin, generic.View):
         return http.HttpResponseRedirect(reverse('is_actionable'))
 
 
+class NextActionView(generic.ListView):
+    template_name = 'next_action.html'
+
+    def get_queryset(self):
+        return Thing.objects.filter(
+                category=Thing.ACTION).order_by('-datetime_update')
+
+
 class MaybeListView(generic.ListView):
     template_name = 'maybe_list.html'
 

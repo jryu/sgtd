@@ -11,7 +11,7 @@ Slow GTD
 {% block content %}
 <a href="{% url 'stuff_list' %}" class="ui-btn ui-btn-icon-left ui-icon-plus">Stuff</a>
 <a href="{% url 'is_actionable' %}" class="ui-btn ui-btn-icon-left ui-icon-arrow-d">Review Stuff</a>
-<a href="#" class="ui-btn ui-btn-icon-left ui-icon-minus">Next Action</a>
+<a href="{% url 'next_action' %}" class="ui-btn ui-btn-icon-left ui-icon-minus">Next Action</a>
 <a href="#" class="ui-btn ui-btn-icon-left ui-icon-arrow-u">Review Projects</a>
 <a href="#" class="ui-btn ui-btn-icon-left ui-icon-calendar">Calendar</a>
 <a href="#" class="ui-btn ui-btn-icon-left ui-icon-clock">Waiting for</a>

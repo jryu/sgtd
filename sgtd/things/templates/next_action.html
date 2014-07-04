@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1>Next Action</h1>
+<a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Main</a>
+{% endblock %}
+
+{% block content %}
+<ul data-role="listview" data-split-icon="delete">
+{% for action in object_list %}
+	<li>
+		<a href="{{ action.pk }}">&gt; {{ action }}</a>
+		<a href="delete">Delete</a>
+	</li>
+{% endfor %}
+</ul>
+{% endblock %}
