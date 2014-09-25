@@ -8,12 +8,17 @@ from things.models import Thing
 class StuffListView(generic.CreateView):
     template_name = 'stuff_list.html'
     model = Thing
+    fields = ['text']
 
     def get_context_data(self, **kwargs):
         context = super(StuffListView, self).get_context_data(**kwargs)
         context['object_list'] =  Thing.objects.filter(
                 category=Thing.STUFF).order_by('-datetime_create')
         return context
+
+    def form_valid(self, form):
+        form.instance.category = Thing.STUFF
+        return super(generic.CreateView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('stuff_list')
