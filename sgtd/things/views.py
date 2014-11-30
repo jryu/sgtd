@@ -4,6 +4,7 @@ from django.template import RequestContext, loader
 from django.views import generic
 
 from things.models import Thing
+from things.forms import ActionUpdateForm
 
 class StuffListView(generic.CreateView):
     template_name = 'stuff_list.html'
@@ -46,6 +47,16 @@ class StuffDeleteView(generic.DeleteView):
         return reverse('is_actionable')
 
 
+class ActionDeleteView(generic.DeleteView):
+    model = Thing
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('next_action')
+
+
 class StuffToMaybeView(generic.detail.SingleObjectMixin, generic.View):
     model = Thing
 
@@ -83,3 +94,13 @@ class FirstActionView(generic.UpdateView):
 
     def get_success_url(self):
         return reverse('is_actionable')
+
+
+class ActionUpdateView(generic.UpdateView):
+    model = Thing
+    fields = ['text']
+    template_name = 'action_update.html'
+    form_class = ActionUpdateForm
+
+    def get_success_url(self):
+        return reverse('next_action')
