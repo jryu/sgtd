@@ -28,7 +28,7 @@ Stuff
   </li>
 
 {% for stuff in object_list %}
-  <li>{{ stuff }}</li>
+  <li data-icon="delete"><a href="{% url 'stuff_delete' stuff.pk %}">{{ stuff }}</a></li>
 {% endfor %}
 </ul>
 </form>
