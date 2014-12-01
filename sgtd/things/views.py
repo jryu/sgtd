@@ -40,21 +40,15 @@ class IsActionableView(generic.View):
         return http.HttpResponse(template.render(context))
 
 
-class StuffDeleteView(generic.DeleteView):
+class ThingDeleteView(generic.DeleteView):
     model = Thing
-
-    def get_success_url(self):
-        return reverse('is_actionable')
-
-
-class ActionDeleteView(generic.DeleteView):
-    model = Thing
+    success_url = None
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('next_action')
+        return reverse(self.success_url)
 
 
 class StuffToMaybeView(generic.detail.SingleObjectMixin, generic.View):

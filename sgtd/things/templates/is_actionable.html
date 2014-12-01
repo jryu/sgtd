@@ -11,7 +11,7 @@
 	<p>{{ stuff }} </p>
 	<a href="{% url 'first_action' stuff.pk %}" class="ui-btn">Yes, it's actionable</a>
 
-	<form action='{% url "stuff_delete" stuff.pk %}' method='post'>{% csrf_token %}
+	<form action='{% url "not_actionable" stuff.pk %}' method='post'>{% csrf_token %}
 	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Never</button>
 	</form>
 
