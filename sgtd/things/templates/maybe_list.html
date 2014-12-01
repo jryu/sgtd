@@ -10,12 +10,11 @@ Someday / Maybe
 {% endblock %}
 
 {% block content %}
-<ul data-role="listview" data-inset="true">
+<ul data-role="listview">
 {% for maybe in object_list %}
   <li>{{ maybe }}</li>
 {% endfor %}
 </ul>
-</form>
 {% endblock %}
 
 {% block footer %}
