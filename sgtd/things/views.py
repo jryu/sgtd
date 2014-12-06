@@ -6,6 +6,14 @@ from django.views import generic
 from things.models import Thing
 from things.forms import ActionUpdateForm
 
+
+def get_default_url_name_for_category(category):
+    return {
+        Thing.STUFF: 'is_actionable',
+        Thing.ACTION: 'next_action',
+        Thing.MAYBE: 'maybe_list',
+    }[category]
+
 class StuffListView(generic.CreateView):
     template_name = 'stuff_list.html'
     model = Thing
@@ -26,18 +34,26 @@ class StuffListView(generic.CreateView):
 
 
 class IsActionableView(generic.View):
-    def get(self, request):
-        try:
-            stuff = Thing.objects.filter(category=Thing.STUFF).order_by(
-                    'datetime_create')[0]
-        except IndexError:
-            stuff = None
-
+    def get(self, request, *args, **kwargs):
+        stuff = self.get_object()
         template = loader.get_template('is_actionable.html')
         context = RequestContext(request, {
             'stuff': stuff,
         })
         return http.HttpResponse(template.render(context))
+
+
+class IsStuffActionableView(IsActionableView):
+    def get_object(self):
+        try:
+            return Thing.objects.filter(category=Thing.STUFF).order_by(
+                    'datetime_create')[0]
+        except IndexError:
+            return None
+
+
+class IsMaybeNowActionableView(generic.detail.SingleObjectMixin, IsActionableView):
+    model = Thing
 
 
 class ThingDeleteView(generic.DeleteView):
@@ -48,7 +64,11 @@ class ThingDeleteView(generic.DeleteView):
         return self.post(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse(self.success_url)
+        if self.success_url is None:
+            return reverse(get_default_url_name_for_category(
+                self.object.category))
+        else:
+            return reverse(self.success_url)
 
 
 class StuffToMaybeView(generic.detail.SingleObjectMixin, generic.View):
@@ -56,9 +76,11 @@ class StuffToMaybeView(generic.detail.SingleObjectMixin, generic.View):
 
     def post(self, request, *args, **kwargs):
         thing = self.get_object()
+        prev_category = thing.category
         thing.category = Thing.MAYBE
         thing.save()
-        return http.HttpResponseRedirect(reverse('is_actionable'))
+        return http.HttpResponseRedirect(reverse(
+            get_default_url_name_for_category(prev_category)))
 
 
 class NextActionView(generic.ListView):
@@ -81,13 +103,15 @@ class FirstActionView(generic.UpdateView):
     model = Thing
     fields = ['text']
     template_name = 'first_action.html'
+    prev_category = None
 
     def form_valid(self, form):
+        self.prev_category = self.object.category
         form.instance.category = Thing.ACTION
         return super(generic.UpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('is_actionable')
+        return reverse(get_default_url_name_for_category(self.prev_category))
 
 
 class ActionUpdateView(generic.UpdateView):
