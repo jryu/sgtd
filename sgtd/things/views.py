@@ -39,6 +39,9 @@ class IsActionableView(generic.View):
         template = loader.get_template('is_actionable.html')
         context = RequestContext(request, {
             'stuff': stuff,
+            'category_stuff': Thing.STUFF,
+            'category_action': Thing.ACTION,
+            'category_maybe': Thing.MAYBE,
         })
         return http.HttpResponse(template.render(context))
 

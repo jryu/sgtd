@@ -9,15 +9,24 @@
 
 {% if stuff %}
 	<p>{{ stuff }} </p>
-	<a href="{% url 'first_action' stuff.pk %}" class="ui-btn">Yes, it's actionable</a>
+
+	{% ifnotequal stuff.category category_stuff %}
+	  <a href="{% url 'text_update' stuff.pk %}" class="ui-btn">Edit Text</a>
+	{% endifnotequal %}
+
+	{% ifnotequal stuff.category category_action %}
+	  <a href="{% url 'first_action' stuff.pk %}" class="ui-btn">Yes, it's actionable</a>
+	{% endifnotequal %}
 
 	<form action='{% url "not_actionable" stuff.pk %}' method='post'>{% csrf_token %}
 	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Never</button>
 	</form>
 
-	<form action='{% url "stuff_to_maybe" stuff.pk %}' method='post'>{% csrf_token %}
-	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Maybe actionable someday</button>
-	</form>
+	{% ifnotequal stuff.category category_maybe %}
+	  <form action='{% url "stuff_to_maybe" stuff.pk %}' method='post'>{% csrf_token %}
+	    <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Maybe actionable someday</button>
+	  </form>
+	{% endifnotequal %}
 {% else %}
 	<p>There is nothing to review.</p>
 {% endif %}
