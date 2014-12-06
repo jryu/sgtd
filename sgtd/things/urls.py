@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^stuff/(?P<pk>\d+)/maybe/$', views.StuffToMaybeView.as_view(), name='stuff_to_maybe'),
     url(r'^action/$', views.NextActionView.as_view(), name='next_action'),
     url(r'^action/(?P<pk>\d+)/delete/$', views.ThingDeleteView.as_view(), name='action_delete'),
-    url(r'^action/(?P<pk>\d+)/update/$', views.ActionUpdateView.as_view(), name='action_update'),
+    url(r'^action/(?P<pk>\d+)/update/$', views.TextUpdateView.as_view(), name='text_update'),
     url(r'^maybe/$', views.MaybeListView.as_view(), name='maybe_list'),
     url(r'^maybe/(?P<pk>\d+)/$', views.IsMaybeNowActionableView.as_view(), name='maybe_update'),
 )

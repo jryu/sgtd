@@ -9,7 +9,7 @@
 <ul data-role="listview" data-split-icon="delete">
 {% for action in object_list %}
 	<li>
-		<a href="{% url 'action_update' action.pk %}">&#9654; {{ action }}</a>
+		<a href="{% url 'text_update' action.pk %}">&#9654; {{ action }}</a>
 		<a href="{% url 'action_delete' action.pk %}">Delete</a>
 	</li>
 {% endfor %}

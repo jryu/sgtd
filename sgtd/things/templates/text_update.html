@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}
-Update Action
+Edit Text
 {% endblock %}
 
 {% block header %}
-<h1>Update Action</h1>
+<h1>Edit Text</h1>
 <a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Main</a>
 {% endblock %}
 
 {% block content %}
-<form action='{% url "action_update" object.pk %}' method="post">
+<form action='{% url "text_update" object.pk %}' method="post">
 	{% csrf_token %}
 	{{ form.non_field_errors }}
 	{% for hidden in form.hidden_fields %}

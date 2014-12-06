@@ -4,7 +4,7 @@ from django.template import RequestContext, loader
 from django.views import generic
 
 from things.models import Thing
-from things.forms import ActionUpdateForm
+from things.forms import TextUpdateForm
 
 
 def get_default_url_name_for_category(category):
@@ -114,11 +114,11 @@ class FirstActionView(generic.UpdateView):
         return reverse(get_default_url_name_for_category(self.prev_category))
 
 
-class ActionUpdateView(generic.UpdateView):
+class TextUpdateView(generic.UpdateView):
     model = Thing
     fields = ['text']
-    template_name = 'action_update.html'
-    form_class = ActionUpdateForm
+    template_name = 'text_update.html'
+    form_class = TextUpdateForm
 
     def get_success_url(self):
-        return reverse('next_action')
+        return reverse(get_default_url_name_for_category(self.object.category))
