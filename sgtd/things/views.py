@@ -9,7 +9,7 @@ from things.forms import TextUpdateForm
 
 def get_default_url_name_for_category(category):
     return {
-        Thing.STUFF: 'is_actionable',
+        Thing.STUFF: 'is_stuff_actionable',
         Thing.ACTION: 'next_action',
         Thing.MAYBE: 'maybe_list',
     }[category]
@@ -55,7 +55,7 @@ class IsStuffActionableView(IsActionableView):
             return None
 
 
-class IsMaybeNowActionableView(generic.detail.SingleObjectMixin, IsActionableView):
+class IsSingleObjectActionableView(generic.detail.SingleObjectMixin, IsActionableView):
     model = Thing
 
 

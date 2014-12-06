@@ -12,7 +12,7 @@ Someday / Maybe
 {% block content %}
 <ul data-role="listview">
 {% for maybe in object_list %}
-  <li><a href="{% url 'maybe_update' maybe.pk %}">{{ maybe }}</a></li>
+  <li><a href="{% url 'is_thing_actionable' maybe.pk %}">{{ maybe }}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}
