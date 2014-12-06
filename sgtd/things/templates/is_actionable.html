@@ -11,20 +11,20 @@
 	<p>{{ stuff }} </p>
 
 	{% ifnotequal stuff.category category_stuff %}
-	  <a href="{% url 'text_update' stuff.pk %}" class="ui-btn">Edit Text</a>
+	  <a href="{% url 'text_update' stuff.pk %}" class="ui-btn ui-btn-icon-left ui-icon-edit">Edit Text</a>
 	{% endifnotequal %}
 
 	{% ifnotequal stuff.category category_action %}
-	  <a href="{% url 'first_action' stuff.pk %}" class="ui-btn">Yes, it's actionable</a>
+	  <a href="{% url 'first_action' stuff.pk %}" class="ui-btn ui-btn-icon-left ui-icon-check">Yes, it's actionable</a>
 	{% endifnotequal %}
 
 	<form action='{% url "not_actionable" stuff.pk %}' method='post'>{% csrf_token %}
-	  <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Never</button>
+	  <button class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete" type="submit" name="submit">Never</button>
 	</form>
 
 	{% ifnotequal stuff.category category_maybe %}
 	  <form action='{% url "stuff_to_maybe" stuff.pk %}' method='post'>{% csrf_token %}
-	    <button class="ui-shadow ui-btn ui-corner-all" type="submit" name="submit">Maybe actionable someday</button>
+	    <button class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-forward" type="submit" name="submit">Maybe actionable someday</button>
 	  </form>
 	{% endifnotequal %}
 {% else %}
