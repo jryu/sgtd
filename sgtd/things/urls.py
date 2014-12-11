@@ -17,5 +17,6 @@ urlpatterns = patterns('',
     url(r'^maybe/$', views.MaybeListView.as_view(), name='maybe_list'),
     url(r'^thing/(?P<pk>\d+)/is-actionable/$', views.IsSingleObjectActionableView.as_view(), name='is_thing_actionable'),
     url(r'^thing/(?P<pk>\d+)/text_update/$', views.TextUpdateView.as_view(), name='text_update'),
+    url(r'^thing/(?P<pk>\d+)/to-action/$', views.CategoryUpdateView.as_view(new_category=Thing.ACTION), name='to_action'),
     url(r'^thing/(?P<pk>\d+)/to-maybe/$', views.CategoryUpdateView.as_view(new_category=Thing.MAYBE), name='to_maybe'),
 )
