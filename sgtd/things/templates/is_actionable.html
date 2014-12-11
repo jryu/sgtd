@@ -23,9 +23,7 @@
 	</form>
 
 	{% ifnotequal stuff.category category_maybe %}
-	  <form action='{% url "stuff_to_maybe" stuff.pk %}' method='post'>{% csrf_token %}
-	    <button class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-forward" type="submit" name="submit">Maybe actionable someday</button>
-	  </form>
+	  <a href="{% url 'to_maybe' stuff.pk %}" class="ui-btn ui-btn-icon-left ui-icon-forward">Maybe actionable someday</a>
 	{% endifnotequal %}
 {% else %}
 	<p>There is nothing to review.</p>

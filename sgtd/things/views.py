@@ -74,13 +74,17 @@ class ThingDeleteView(generic.DeleteView):
             return reverse(self.success_url)
 
 
-class StuffToMaybeView(generic.detail.SingleObjectMixin, generic.View):
+class CategoryUpdateView(generic.detail.SingleObjectMixin, generic.View):
     model = Thing
+    new_category = None
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         thing = self.get_object()
         prev_category = thing.category
-        thing.category = Thing.MAYBE
+        thing.category = self.new_category
         thing.save()
         return http.HttpResponseRedirect(reverse(
             get_default_url_name_for_category(prev_category)))
