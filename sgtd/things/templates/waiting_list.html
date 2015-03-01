@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Waiting for
+{% endblock %}
+
+{% block header %}
+<h1>Waiting for</h1>
+<a href="{% url 'main' %}" data-icon='home' class='ui-btn-right'>Main</a>
+{% endblock %}
+
+{% block content %}
+<ul data-role="listview">
+{% for thing in object_list %}
+  <li><a href="{% url 'is_thing_actionable' thing.pk %}">{{ thing }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

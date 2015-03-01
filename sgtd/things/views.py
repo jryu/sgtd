@@ -11,6 +11,7 @@ def get_default_url_name_for_category(category):
     return {
         Thing.STUFF: 'is_stuff_actionable',
         Thing.ACTION: 'next_action',
+        Thing.WAITING: 'waiting_list',
         Thing.MAYBE: 'maybe_list',
     }[category]
 
@@ -41,6 +42,7 @@ class IsActionableView(generic.View):
             'stuff': stuff,
             'category_stuff': Thing.STUFF,
             'category_action': Thing.ACTION,
+            'category_waiting': Thing.WAITING,
             'category_maybe': Thing.MAYBE,
         })
         return http.HttpResponse(template.render(context))
@@ -96,6 +98,14 @@ class NextActionView(generic.ListView):
     def get_queryset(self):
         return Thing.objects.filter(
                 category=Thing.ACTION).order_by('-datetime_update')
+
+
+class WaitingListView(generic.ListView):
+    template_name = 'waiting_list.html'
+
+    def get_queryset(self):
+        return Thing.objects.filter(
+                category=Thing.WAITING).order_by('-datetime_create')
 
 
 class MaybeListView(generic.ListView):

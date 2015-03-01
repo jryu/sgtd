@@ -28,6 +28,10 @@
     <button class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete" type="submit" name="submit">Never</button>
   </form>
 
+  {% ifnotequal stuff.category category_waiting %}
+    <a href="{% url 'to_waiting' stuff.pk %}" class="ui-btn ui-btn-icon-left ui-icon-clock">Delegate and wait</a>
+  {% endifnotequal %}
+
   {% ifnotequal stuff.category category_maybe %}
     <a href="{% url 'to_maybe' stuff.pk %}" class="ui-btn ui-btn-icon-left ui-icon-forward">Maybe actionable someday</a>
   {% endifnotequal %}

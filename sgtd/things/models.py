@@ -3,11 +3,13 @@ from django.db import models
 class Thing(models.Model):
     STUFF = 's'
     ACTION = 'a'
+    WAITING = 'w'
     MAYBE = 'm'
 
     CATEGORY_CHOICES = (
         (STUFF, 'Stuff'),
         (ACTION, 'Action'),
+        (WAITING, 'Waiting for'),
         (MAYBE, 'Maybe / Someday'),
     )
 
