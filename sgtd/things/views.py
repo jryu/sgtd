@@ -66,7 +66,13 @@ class ThingDeleteView(generic.DeleteView):
     success_url = None
 
     def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
+        thing = self.get_object()
+        template = loader.get_template('confirm_delete.html')
+        context = RequestContext(request, {
+            'thing': thing,
+        })
+        return http.HttpResponse(template.render(context))
+
 
     def get_success_url(self):
         if self.success_url is None:
