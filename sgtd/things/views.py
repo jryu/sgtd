@@ -10,7 +10,7 @@ from things.forms import TextUpdateForm
 def get_default_url_name_for_category(category):
     return {
         Thing.STUFF: 'stuff_list',
-        Thing.ACTION: 'next_action',
+        Thing.ACTION: 'action_list',
         Thing.WAITING: 'waiting_list',
         Thing.MAYBE: 'maybe_list',
     }[category]
@@ -98,28 +98,13 @@ class CategoryUpdateView(generic.detail.SingleObjectMixin, generic.View):
             get_default_url_name_for_category(prev_category)))
 
 
-class NextActionView(generic.ListView):
-    template_name = 'next_action.html'
+class ThingListView(generic.ListView):
+    template_name = None
+    category = None
 
     def get_queryset(self):
         return Thing.objects.filter(
-                category=Thing.ACTION).order_by('-datetime_update')
-
-
-class WaitingListView(generic.ListView):
-    template_name = 'waiting_list.html'
-
-    def get_queryset(self):
-        return Thing.objects.filter(
-                category=Thing.WAITING).order_by('-datetime_create')
-
-
-class MaybeListView(generic.ListView):
-    template_name = 'maybe_list.html'
-
-    def get_queryset(self):
-        return Thing.objects.filter(
-                category=Thing.MAYBE).order_by('-datetime_create')
+                category=self.category).order_by('-datetime_update')
 
 
 class FirstActionView(generic.UpdateView):

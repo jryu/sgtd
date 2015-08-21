@@ -6,7 +6,7 @@ from things.models import Thing
 
 urlpatterns = patterns('',
     url(r'^$',
-        TemplateView.as_view(template_name="main_page.html"), name='main'),
+        TemplateView.as_view(template_name='main_page.html'), name='main'),
 
     url(r'^stuff/$', views.StuffListView.as_view(), name='stuff_list'),
     url(r'^stuff/is-actionable/$',
@@ -17,9 +17,18 @@ urlpatterns = patterns('',
         views.ThingDeleteView.as_view(success_url='is_stuff_actionable'),
         name='not_actionable'),
 
-    url(r'^action/$', views.NextActionView.as_view(), name='next_action'),
-    url(r'^waiting/$', views.WaitingListView.as_view(), name='waiting_list'),
-    url(r'^maybe/$', views.MaybeListView.as_view(), name='maybe_list'),
+    url(r'^action/$',
+        views.ThingListView.as_view(
+            category=Thing.ACTION, template_name='action_list.html'),
+        name='action_list'),
+    url(r'^waiting/$',
+        views.ThingListView.as_view(
+            category=Thing.WAITING, template_name='waiting_list.html'),
+        name='waiting_list'),
+    url(r'^maybe/$',
+        views.ThingListView.as_view(
+            category=Thing.MAYBE, template_name='maybe_list.html'),
+        name='maybe_list'),
 
     url(r'^thing/(?P<pk>\d+)/is-actionable/$',
         views.IsSingleObjectActionableView.as_view(),
