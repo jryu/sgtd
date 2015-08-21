@@ -10,7 +10,7 @@
 {% for action in object_list %}
 	<li>
 		<a href="{% url 'is_thing_actionable' action.pk %}">&#9654; {{ action }}</a>
-		<a href="{% url 'action_delete' action.pk %}">Delete</a>
+		<a href="{% url 'thing_delete' action.pk %}">Delete</a>
 	</li>
 {% endfor %}
 </ul>

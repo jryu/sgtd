@@ -9,7 +9,7 @@ from things.forms import TextUpdateForm
 
 def get_default_url_name_for_category(category):
     return {
-        Thing.STUFF: 'is_stuff_actionable',
+        Thing.STUFF: 'stuff_list',
         Thing.ACTION: 'next_action',
         Thing.WAITING: 'waiting_list',
         Thing.MAYBE: 'maybe_list',
