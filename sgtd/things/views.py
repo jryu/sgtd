@@ -7,13 +7,14 @@ from things.models import Thing
 from things.forms import TextUpdateForm
 
 
-def get_default_url_name_for_category(category):
+def get_default_success_url_name(category):
     return {
-        Thing.STUFF: 'stuff_list',
+        Thing.STUFF: 'is_stuff_actionable',
         Thing.ACTION: 'action_list',
         Thing.WAITING: 'waiting_list',
         Thing.MAYBE: 'maybe_list',
     }[category]
+
 
 class StuffListView(generic.CreateView):
     template_name = 'stuff_list.html'
@@ -76,8 +77,7 @@ class ThingDeleteView(generic.DeleteView):
 
     def get_success_url(self):
         if self.success_url is None:
-            return reverse(get_default_url_name_for_category(
-                self.object.category))
+            return reverse(get_default_success_url_name(self.object.category))
         else:
             return reverse(self.success_url)
 
@@ -95,7 +95,7 @@ class CategoryUpdateView(generic.detail.SingleObjectMixin, generic.View):
         thing.category = self.new_category
         thing.save()
         return http.HttpResponseRedirect(reverse(
-            get_default_url_name_for_category(prev_category)))
+            get_default_success_url_name(prev_category)))
 
 
 class ThingListView(generic.ListView):
@@ -119,7 +119,7 @@ class FirstActionView(generic.UpdateView):
         return super(generic.UpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse(get_default_url_name_for_category(self.prev_category))
+        return reverse(get_default_success_url_name(self.prev_category))
 
 
 class TextUpdateView(generic.UpdateView):
@@ -129,4 +129,4 @@ class TextUpdateView(generic.UpdateView):
     form_class = TextUpdateForm
 
     def get_success_url(self):
-        return reverse(get_default_url_name_for_category(self.object.category))
+        return reverse(get_default_success_url_name(self.object.category))

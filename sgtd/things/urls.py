@@ -9,13 +9,14 @@ urlpatterns = patterns('',
         TemplateView.as_view(template_name='main_page.html'), name='main'),
 
     url(r'^stuff/$', views.StuffListView.as_view(), name='stuff_list'),
+    url(r'^stuff/(?P<pk>\d+)/delete/$',
+        views.ThingDeleteView.as_view(success_url='stuff_list'),
+        name='stuff_delete'),
+
     url(r'^stuff/is-actionable/$',
         views.IsStuffActionableView.as_view(), name='is_stuff_actionable'),
     url(r'^stuff/(?P<pk>\d+)/first-action/$',
         views.FirstActionView.as_view(), name='first_action'),
-    url(r'^stuff/(?P<pk>\d+)/not-actionable/$',
-        views.ThingDeleteView.as_view(success_url='is_stuff_actionable'),
-        name='not_actionable'),
 
     url(r'^action/$',
         views.ThingListView.as_view(
