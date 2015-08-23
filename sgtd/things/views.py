@@ -35,6 +35,7 @@ class StuffListView(generic.CreateView):
         return reverse('stuff_list')
 
 
+# Base class of views asking whether a Thing is actionable.
 class IsActionableView(generic.View):
     def get(self, request, *args, **kwargs):
         stuff = self.get_object()
@@ -49,6 +50,7 @@ class IsActionableView(generic.View):
         return http.HttpResponse(template.render(context))
 
 
+# Asks whether the oldest STUFF is actionable.
 class IsStuffActionableView(IsActionableView):
     def get_object(self):
         try:
@@ -58,7 +60,9 @@ class IsStuffActionableView(IsActionableView):
             return None
 
 
-class IsSingleObjectActionableView(generic.detail.SingleObjectMixin, IsActionableView):
+# Asks if a Thing whose primary key matches URL parameter 'pk' is actionable.
+class IsSingleObjectActionableView(
+        generic.detail.SingleObjectMixin, IsActionableView):
     model = Thing
 
 
