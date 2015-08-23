@@ -16,12 +16,7 @@
   {% endifnotequal %}
 
   {% ifnotequal stuff.category category_action %}
-    <a
-      {% ifequal stuff.category category_stuff %}
-        href="{% url 'first_action' stuff.pk %}"
-      {% else %}
-        href="{% url 'to_action' stuff.pk %}"
-      {% endifequal %}
+    <a href="{% url 'first_action' stuff.pk %}"
       class="ui-btn ui-btn-icon-left ui-icon-check">Yes, it's actionable</a>
   {% endifnotequal %}
 

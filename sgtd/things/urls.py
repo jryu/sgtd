@@ -38,9 +38,6 @@ urlpatterns = patterns('',
         views.TextUpdateView.as_view(), name='text_update'),
 
     # Update category
-    url(r'^thing/(?P<pk>\d+)/to-action/$',
-        views.CategoryUpdateView.as_view(new_category=Thing.ACTION),
-        name='to_action'),
     url(r'^thing/(?P<pk>\d+)/to-waiting/$',
         views.CategoryUpdateView.as_view(new_category=Thing.WAITING),
         name='to_waiting'),
