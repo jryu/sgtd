@@ -20,6 +20,13 @@ First Action
 		{{ field.errors }}
 		{{ field }}
 	{% endfor %}
+
+	<fieldset data-role="collapsible">
+		<legend>If it is a multi step project ...</legend>
+		<label for="project">Project Name:</label>
+		<input type="text" name="project" id="project" value="">
+	</fieldset>
+
 	<button class="ui-shadow ui-btn ui-corner-all" type="submit">Save</button>
 </form>
 {% endblock %}

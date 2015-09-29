@@ -3,7 +3,7 @@ from django import http
 from django.template import RequestContext, loader
 from django.views import generic
 
-from things.models import Thing
+from things.models import Project, Thing
 from things.forms import TextUpdateForm
 
 
@@ -116,11 +116,22 @@ class FirstActionView(generic.UpdateView):
     fields = ['text']
     template_name = 'first_action.html'
     prev_category = None
+    project = None
 
     def form_valid(self, form):
         self.prev_category = self.object.category
         form.instance.category = Thing.ACTION
+
+        if self.project:
+            self.object.project = self.project
+
         return super(generic.UpdateView, self).form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        project_name = request.POST.get("project", "");
+        if project_name:
+            self.project = Project.objects.create(text=project_name)
+        return super(generic.UpdateView, self).post(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse(get_default_success_url_name(self.prev_category))
