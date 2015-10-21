@@ -10,7 +10,8 @@ Stuff
 {% endblock %}
 
 {% block content %}
-<form action='{% url "stuff_list" %}' method='post'>{% csrf_token %}
+<form action='{% url "stuff_list" %}' method='post' data-ajax="false">
+	{% csrf_token %}
 <ul data-role="listview" data-inset="true">
   <li class="ui-field-contain">
 

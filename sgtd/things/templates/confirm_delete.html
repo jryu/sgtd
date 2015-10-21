@@ -7,7 +7,7 @@
 
 {% block content %}
 Do you want to delete <strong>{{ thing }}</strong>?
-<form action="./" method="post">
+<form action="./" method="post" data-ajax="false">
 	{% csrf_token %}
 	<div class="ui-grid-a">
 		<div class="ui-block-a">
