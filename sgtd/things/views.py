@@ -139,7 +139,6 @@ class FirstActionView(generic.UpdateView):
 
 class TextUpdateView(generic.UpdateView):
     model = Thing
-    fields = ['text']
     template_name = 'text_update.html'
     form_class = TextUpdateForm
 

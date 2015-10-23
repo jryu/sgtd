@@ -10,6 +10,13 @@ class Project(models.Model):
         return self.text
 
 
+class Context(models.Model):
+    text = models.CharField(max_length=128)
+
+    def __unicode__(self):
+        return self.text
+
+
 class Thing(models.Model):
     STUFF = 's'
     ACTION = 'a'
@@ -28,6 +35,7 @@ class Thing(models.Model):
     datetime_create = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=1, choices=CATEGORY_CHOICES,
             default=STUFF)
+    context = models.ForeignKey(Context, null=True, blank=True)
     project = models.ForeignKey(Project, null=True, blank=True)
 
     def __unicode__(self):
