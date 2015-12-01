@@ -1,0 +1,14 @@
+{% for todo in object_list %}
+  <li>
+    {% if todo.last_time.date == today %}
+      Done
+    {% elif todo.last_time %}
+      {{todo.last_time | timesince}}
+    {% else %}
+      Never
+    {% endif %}
+
+    {{ todo }}
+  </li>
+{% endfor %}
+
