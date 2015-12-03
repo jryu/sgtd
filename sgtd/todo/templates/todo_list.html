@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block script %}
+<script src="http://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.4/js.cookie.min.js"></script>
+<script>
   function setLastDate(id, date) {
     var today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -33,6 +35,11 @@
     }
   }
 
+  function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+
   $(function() {
     {% for todo in object_list %}
       {% if todo.last_date %}
@@ -44,7 +51,41 @@
         setLastDate('{{ todo.pk }}', null);
       {% endif %}
     {% endfor %}
+
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+          xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+        }
+      }
+    });
   });
+
+  function log(todo) {
+    $.mobile.loading('show');
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var request = $.ajax('{% url 'todo_log' %}', {
+      method: 'POST',
+      data: {
+        date: [today.getFullYear(), today.getMonth() + 1, today.getDay()].join('-'),
+        todo: todo,
+      }
+    });
+
+    request.always(function() {
+      $.mobile.loading('hide');
+    });
+
+    request.done(function(response) {
+      setLastDate(todo, today);
+    });
+
+    return false;
+  }
+</script>
 {% endblock %}
 
 {% block header %}
@@ -54,7 +95,7 @@
 {% block content %}
   <ul data-role="listview" data-count-theme="b" data-inset="true">
   {% for todo in object_list %}
-    <li><a id="btn-{{ todo.pk }}" href=#>
+    <li><a id="btn-{{ todo.pk }}" onclick="log({{ todo.pk }})" href=# ref=external>
       {{ todo }}
       <span id="delta-{{ todo.pk }}" class="ui-li-count"></span>
     </a></li>
