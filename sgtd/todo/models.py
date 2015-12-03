@@ -14,6 +14,7 @@ class Todo(models.Model):
 
 class Log(models.Model):
     datetime_create = models.DateTimeField(auto_now_add=True)
+    date = models.DateField()
     todo = models.ForeignKey(Todo)
 
     def __unicode__(self):

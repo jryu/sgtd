@@ -1,14 +1,63 @@
-{% for todo in object_list %}
-  <li>
-    {% if todo.last_time.date == today %}
-      Done
-    {% elif todo.last_time %}
-      {{todo.last_time | timesince}}
-    {% else %}
-      Never
-    {% endif %}
+{% extends "todo_base.html" %}
 
-    {{ todo }}
-  </li>
-{% endfor %}
+{% block title %}
+  Todo List
+{% endblock %}
 
+{% block script %}
+  function setLastDate(id, date) {
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var buttonElement = $('#btn-' + id);
+    var deltaElement =  $('#delta-' + id);
+    if (!date) {
+      buttonElement.buttonMarkup({icon: 'plus'});
+
+      deltaElement.text('New');
+      deltaElement.show();
+    } else if (date >= today) {
+      buttonElement.buttonMarkup({icon: 'check'});
+
+      deltaElement.hide();
+    } else {
+      buttonElement.buttonMarkup({icon: 'plus'});
+
+      var delta = (today - date) / (1000 * 60 * 60 * 24);
+      if (delta == 1) {
+        deltaElement.text('Yesterday');
+      } else {
+        deltaElement.text(delta + ' days ago');
+      }
+      deltaElement.show();
+    }
+  }
+
+  $(function() {
+    {% for todo in object_list %}
+      {% if todo.last_date %}
+        setLastDate('{{ todo.pk }}',
+            new Date({{ todo.last_date.year }},
+                     {{ todo.last_date.month }} - 1,
+                     {{ todo.last_date.day }}));
+      {% else %}
+        setLastDate('{{ todo.pk }}', null);
+      {% endif %}
+    {% endfor %}
+  });
+{% endblock %}
+
+{% block header %}
+  <h1>Todo List</h1>
+{% endblock %}
+
+{% block content %}
+  <ul data-role="listview" data-count-theme="b" data-inset="true">
+  {% for todo in object_list %}
+    <li><a id="btn-{{ todo.pk }}" href=#>
+      {{ todo }}
+      <span id="delta-{{ todo.pk }}" class="ui-li-count"></span>
+    </a></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
