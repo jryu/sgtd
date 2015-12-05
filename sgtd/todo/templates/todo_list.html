@@ -67,22 +67,40 @@
     var today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    var request = $.ajax('{% url 'todo_log' %}', {
-      method: 'POST',
-      data: {
-        date: [today.getFullYear(), today.getMonth() + 1, today.getDay()].join('-'),
-        todo: todo,
-      }
-    });
+    var isUncheck = $('#btn-' + todo).hasClass('ui-icon-check');
+
+    var request = $.ajax(
+      isUncheck ? "{% url 'todo_uncheck' %}" : "{% url 'todo_check' %}",
+      {
+        method: 'POST',
+        data: {
+          date: [today.getFullYear(),
+                 today.getMonth() + 1,
+                 today.getDay()].join('-'),
+          todo: todo,
+        }
+      });
 
     request.always(function() {
       $.mobile.loading('hide');
     });
 
     request.done(function(response) {
-      setLastDate(todo, today);
+      var last_date;
+      if (isUncheck) {
+        if (response.last_date) {
+          // Set date of the last log.
+          last_date = new Date(response.year, response.month - 1, response.day);
+        } else {
+          // There is no log on this todo item anymore.
+          last_date = null;
+        }
+      } else {
+        // The last log has been saved successfully.
+        last_date = today;
+      }
+      setLastDate(todo, last_date);
     });
-
     return false;
   }
 </script>

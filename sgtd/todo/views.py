@@ -2,9 +2,11 @@ from django.core.urlresolvers import reverse
 from django.db.models import Max
 from django.http import JsonResponse
 from django.views import generic
+from django.views.generic.base import View
 from django.views.generic.edit import CreateView
 
-from todo.models import Log, Todo
+from .models import Log, Todo
+from .forms import LogForm
 
 
 class TodoListView(generic.ListView):
@@ -48,3 +50,26 @@ class LogCreateView(AjaxableResponseMixin, CreateView):
 
     def get_success_url(self):
         return reverse('todo_list')
+
+
+class LogDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        form = LogForm(request.POST)
+        if form.is_valid():
+            Log.objects.filter(todo_id=form.cleaned_data['todo'],
+                    date__gte=form.cleaned_data['date']).delete()
+
+            last_date = (Log.objects.filter(todo_id=form.cleaned_data['todo'])
+                    .aggregate(Max('date'))['date__max']
+
+            response = {
+              'last_date': last_date,
+            }
+            if last_date:
+                response['year'] = last_date.year
+                response['month'] = last_date.month
+                response['day'] = last_date.day
+
+            return JsonResponse(response)
+        else:
+            return JsonResponse({error: 'Invalid request data'}, status=400)
