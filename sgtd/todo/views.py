@@ -60,7 +60,7 @@ class LogDeleteView(View):
                     date__gte=form.cleaned_data['date']).delete()
 
             last_date = (Log.objects.filter(todo_id=form.cleaned_data['todo'])
-                    .aggregate(Max('date'))['date__max']
+                    .aggregate(Max('date'))['date__max'])
 
             response = {
               'last_date': last_date,
