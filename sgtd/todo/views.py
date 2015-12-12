@@ -3,6 +3,7 @@ from django.db.models import Max
 from django.http import JsonResponse
 from django.views import generic
 from django.views.generic.base import View
+from django.views.generic.dates import DayArchiveView
 from django.views.generic.edit import CreateView
 
 from .models import Log, Todo
@@ -71,3 +72,27 @@ class LogDeleteView(View):
                 response['day'] = last_date.day
 
             return JsonResponse(response)
+
+
+class TodoDayArchiveView(DayArchiveView):
+    queryset = Log.objects.none()
+    date_field = 'date'
+    allow_empty = True
+    allow_future = True
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(DayArchiveView, self).get_context_data(**kwargs)
+
+        context['checked_list'] = (Todo.objects.filter(
+            log__date__year=self.get_year(),
+            log__date__month=self.get_month(),
+            log__date__day=self.get_day())
+            .order_by('log__date').distinct())
+
+        context['unchecked_list'] = (Todo.objects.exclude(
+            log__date__year=self.get_year(),
+            log__date__month=self.get_month(),
+            log__date__day=self.get_day()))
+
+        return context
