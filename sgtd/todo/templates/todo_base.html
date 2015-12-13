@@ -6,7 +6,32 @@
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.4/js.cookie.min.js"></script>
+<script>
+  var CHECK_URL = "{% url 'todo_check' %}";
+  var UNCHECK_URL = "{% url 'todo_uncheck' %}";
+
+  var TODAY = new Date();
+  TODAY.setHours(0, 0, 0, 0);
+
+  function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+
+  $(function() {
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+          xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+        }
+      }
+    });
+  });
+</script>
+
 {% block script %}{% endblock %}
+
 </head>
 <body>
 <div data-role="page">

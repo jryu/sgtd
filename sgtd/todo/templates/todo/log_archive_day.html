@@ -4,19 +4,30 @@
   {{ day }}
 {% endblock %}
 
+
+{% block script %}
+
+{% load staticfiles %}
+<script src="{% static 'todo/check.js' %}"></script>
+
+{% endblock %}
+
+
 {% block header %}
   <h1>{{ day }}</h1>
   <div data-role="navbar" data-iconpos="right">
     <ul>
       <li>
         <a href="{% url 'archive_day' previous_day.year previous_day.month previous_day.day %}"
-            class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">
+            class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l"
+	    data-ajax="false">
           {{ previous_day }}
         </a>
       </li>
       <li>
         <a href="{% url 'archive_day' next_day.year next_day.month next_day.day %}"
-            class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-carat-r">
+            class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-carat-r"
+	    data-ajax="false">
           {{ next_day }}
         </a>
       </li>
@@ -26,13 +37,19 @@
 {% endblock %}
 
 {% block content %}
+  <script>
+    TODAY = new Date({{ day.year }}, {{ day.month }} - 1, {{ day.day }});
+  </script>
+
   <ul data-role="listview" data-count-theme="b" data-inset="true">
-  {% for item in checked_list %}
-    <li data-icon="check"><a href="#">{{ item }}</a></li>
+  {% for todo in checked_list %}
+    <li data-icon="check"><a id="btn-{{ todo.pk }}"
+        onclick="toggle({{ todo.pk }})" href="#">{{ todo }}</a></li>
   {% endfor %}
 
-  {% for item in unchecked_list %}
-    <li data-icon="plus"><a href="#">{{ item }}</a></li>
+  {% for todo in unchecked_list %}
+    <li data-icon="plus"><a id="btn-{{ todo.pk }}"
+        onclick="toggle({{ todo.pk }})" href="#">{{ todo }}</a></li>
   {% endfor %}
   </ul>
 {% endblock %}

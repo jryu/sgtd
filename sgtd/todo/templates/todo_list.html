@@ -5,41 +5,7 @@
 {% endblock %}
 
 {% block script %}
-<script src="http://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.4/js.cookie.min.js"></script>
 <script>
-  function setLastDate(id, date) {
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    var buttonElement = $('#btn-' + id);
-    var deltaElement =  $('#delta-' + id);
-    if (!date) {
-      buttonElement.buttonMarkup({icon: 'plus'});
-
-      deltaElement.text('New');
-      deltaElement.show();
-    } else if (date >= today) {
-      buttonElement.buttonMarkup({icon: 'check'});
-
-      deltaElement.hide();
-    } else {
-      buttonElement.buttonMarkup({icon: 'plus'});
-
-      var delta = (today - date) / (1000 * 60 * 60 * 24);
-      if (delta == 1) {
-        deltaElement.text('Yesterday');
-      } else {
-        deltaElement.text(delta + ' days ago');
-      }
-      deltaElement.show();
-    }
-  }
-
-  function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-  }
-
   $(function() {
     {% for todo in object_list %}
       {% if todo.last_date %}
@@ -51,66 +17,12 @@
         setLastDate('{{ todo.pk }}', null);
       {% endif %}
     {% endfor %}
-
-    $.ajaxSetup({
-      beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-          xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
-        }
-      }
-    });
   });
-
-  function log(todo) {
-    $.mobile.loading('show');
-
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    var isUncheck = $('#btn-' + todo).hasClass('ui-icon-check');
-
-    var request = $.ajax(
-      isUncheck ? "{% url 'todo_uncheck' %}" : "{% url 'todo_check' %}",
-      {
-        method: 'POST',
-        data: {
-          date: [today.getFullYear(),
-                 today.getMonth() + 1,
-                 today.getDate()].join('-'),
-          todo: todo,
-        }
-      });
-
-    request.always(function() {
-      $.mobile.loading('hide');
-    });
-
-    request.done(function(response) {
-      var last_date;
-      if (isUncheck) {
-        if (response.last_date) {
-          // Set date of the last log.
-          last_date = new Date(response.year, response.month - 1, response.day);
-        } else {
-          // There is no log on this todo item anymore.
-          last_date = null;
-        }
-      } else {
-        // The last log has been saved successfully.
-        last_date = today;
-      }
-      setLastDate(todo, last_date);
-    });
-
-    request.fail(function(response, a, b) {
-      $('#errorMessage p').html(
-          $.map(response.responseJSON, function(val, key) { return val; })
-            .join(' '));
-      $('#errorMessage').popup('open');
-    });
-    return false;
-  }
 </script>
+
+{% load staticfiles %}
+<script src="{% static 'todo/check.js' %}"></script>
+
 {% endblock %}
 
 {% block header %}
@@ -120,7 +32,7 @@
 {% block content %}
   <ul data-role="listview" data-count-theme="b" data-inset="true">
   {% for todo in object_list %}
-    <li><a id="btn-{{ todo.pk }}" onclick="log({{ todo.pk }})" href=# ref=external>
+    <li><a id="btn-{{ todo.pk }}" onclick="toggle({{ todo.pk }})" href=# ref=external>
       {{ todo }}
       <span id="delta-{{ todo.pk }}" class="ui-li-count"></span>
     </a></li>
