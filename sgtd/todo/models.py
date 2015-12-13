@@ -18,6 +18,7 @@ class Log(models.Model):
     todo = models.ForeignKey(Todo)
 
     def __unicode__(self):
-        return ' '.join([
+        return ' - '.join([
                 self.todo.text,
-                self.datetime_create.strftime("%d/%m/%y")])
+                self.date.strftime("%d/%m/%y"),
+                self.datetime_create.isoformat(' ')])
