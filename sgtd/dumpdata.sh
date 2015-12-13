@@ -1,4 +1,10 @@
-mkdir -p things/fixtures
+TIMESTAMP=`date +%s`
 
-./manage.py dumpdata --indent=2 things auth.User | \
-	tee things/fixtures/initial_data.json
+mv db.sqlite3 ~/db.$TIMESTAMP.sqlite3
+
+./manage.py dumpdata --indent=2 things todo auth.User | \
+	tee ~/dump.$TIMESTAMP.json
+
+./manage.py syncdb --noinput --no-initial-data
+
+./manage.py loaddata ~/dump.$TIMESTAMP.json
