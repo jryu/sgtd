@@ -7,6 +7,10 @@
 {% block script %}
 <script>
   $(function() {
+    var todayLabel = $('h1 span');
+    todayLabel.text(
+        ['(', TODAY.getMonth() + 1, '/', TODAY.getDate(), ')'].join(''));
+
     {% for todo in object_list %}
       {% if todo.last_date %}
         setLastDate('{{ todo.pk }}',
@@ -18,6 +22,16 @@
       {% endif %}
     {% endfor %}
   });
+
+  function openYesterday() {
+    var yesterday = new Date(TODAY.getTime());
+    yesterday.setDate(yesterday.getDate() - 1);
+    window.open(['/todo/log',
+                 yesterday.getFullYear(),
+                 yesterday.getMonth() + 1,
+                 yesterday.getDate()].join('/'),
+		 '_self');
+  };
 </script>
 
 {% load staticfiles %}
@@ -26,7 +40,13 @@
 {% endblock %}
 
 {% block header %}
-  <h1>Todo List</h1>
+  <h1>Today <span></span></h1>
+  <a href="#popupMenu" data-rel="popup" data-icon='edit' class="ui-btn-right ">Edit</a>
+  <div data-role="popup" id="popupMenu" data-theme="b">
+    <ul data-role="listview" data-inset="true" style="min-width:210px;">
+      <li><a onclick="openYesterday()" href="#" class="ui-btn ui-btn-icon-left ui-icon-clock" ref=external>Amend History</a></li>
+    </ul>
+  </div>
 {% endblock %}
 
 {% block content %}

@@ -10,11 +10,25 @@
 {% load staticfiles %}
 <script src="{% static 'todo/check.js' %}"></script>
 
+<script>
+  $(function() {
+    var nextDay = createDate(
+        {{ next_day.year }}, {{ next_day.month }}, {{ next_day.day }});
+
+    if (TODAY <= nextDay) {
+	$('#next-day-btn').addClass('ui-state-disabled').text('N/A');
+    }
+
+    TODAY = createDate({{ day.year }}, {{ day.month }}, {{ day.day }});
+  });
+</script>
+
 {% endblock %}
 
 
 {% block header %}
   <h1>{{ day }}</h1>
+  <a href="{% url 'todo_list' %}" data-icon='home' class='ui-btn-right' data-ajax="false">Today</a>
   <div data-role="navbar" data-iconpos="right">
     <ul>
       <li>
@@ -26,6 +40,7 @@
       </li>
       <li>
         <a href="{% url 'archive_day' next_day.year next_day.month next_day.day %}"
+            id="next-day-btn"
             class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-carat-r"
 	    data-ajax="false">
           {{ next_day }}
@@ -37,10 +52,6 @@
 {% endblock %}
 
 {% block content %}
-  <script>
-    TODAY = new Date({{ day.year }}, {{ day.month }} - 1, {{ day.day }});
-  </script>
-
   <ul data-role="listview" data-count-theme="b" data-inset="true">
   {% for todo in checked_list %}
     <li data-icon="check"><a id="btn-{{ todo.pk }}"

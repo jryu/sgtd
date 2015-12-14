@@ -1,8 +1,18 @@
+function formatDate(date) {
+  return [date.getMonth() + 1,
+          date.getDate(),
+          date.getFullYear()].join('/');
+};
+
+function createDate(y, m, d) {
+  return new Date(y, m - 1, d);
+};
+
 function setLastDate(id, lastDate) {
   if (lastDate) { lastDate.setHours(0, 0, 0, 0); }
 
   var buttonElement = $('#btn-' + id);
-  var deltaElement =  $('#delta-' + id);
+  var deltaElement = $('#delta-' + id);
   if (!lastDate) {
     buttonElement.buttonMarkup({icon: 'plus'});
 
@@ -23,7 +33,7 @@ function setLastDate(id, lastDate) {
     }
     deltaElement.show();
   }
-}
+};
 
 function toggle(todo) {
   $.mobile.loading('show');
@@ -35,9 +45,7 @@ function toggle(todo) {
     {
       method: 'POST',
       data: {
-        date: [TODAY.getFullYear(),
-               TODAY.getMonth() + 1,
-               TODAY.getDate()].join('-'),
+        date: formatDate(TODAY),
         todo: todo,
       }
     });
@@ -51,7 +59,7 @@ function toggle(todo) {
     if (isUncheck) {
       if (response.last_date) {
         // Set date of the last log.
-        last_date = new Date(response.year, response.month - 1, response.day);
+        last_date = createDate(response.year, response.month, response.day);
       } else {
         // There is no log on this todo item anymore.
         last_date = null;
@@ -70,4 +78,4 @@ function toggle(todo) {
     $('#errorMessage').popup('open');
   });
   return false;
-}
+};
