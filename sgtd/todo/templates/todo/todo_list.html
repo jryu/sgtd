@@ -44,7 +44,7 @@
   <a href="#popupMenu" data-rel="popup" data-icon='edit' class="ui-btn-right ">Edit</a>
   <div data-role="popup" id="popupMenu" data-theme="b">
     <ul data-role="listview" data-inset="true" style="min-width:210px;">
-      <li><a onclick="openYesterday()" href="#" class="ui-btn ui-btn-icon-left ui-icon-clock" ref=external>Amend History</a></li>
+      <li><a onclick="openYesterday()" href="#" class="ui-btn ui-btn-icon-left ui-icon-clock">Amend History</a></li>
     </ul>
   </div>
 {% endblock %}
@@ -52,7 +52,7 @@
 {% block content %}
   <ul data-role="listview" data-count-theme="b" data-inset="true">
   {% for todo in object_list %}
-    <li><a id="btn-{{ todo.pk }}" onclick="toggle({{ todo.pk }})" href=# ref=external>
+    <li><a id="btn-{{ todo.pk }}" onclick="toggle({{ todo.pk }})" href=#>
       {{ todo }}
       <span id="delta-{{ todo.pk }}" class="ui-li-count"></span>
     </a></li>
