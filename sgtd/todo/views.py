@@ -10,7 +10,7 @@ from .models import Log, Todo
 from .forms import LogForm
 
 
-class TodoListView(generic.ListView):
+class MainView(generic.ListView):
     def get_queryset(self):
         return (Todo.objects.annotate(last_date=Max('log__date'))
                 .order_by('last_date'))
@@ -45,10 +45,9 @@ class AjaxableResponseMixin(object):
 
 class LogCreateView(AjaxableResponseMixin, CreateView):
     model = Log
-    template_name = 'log_form.html'
 
     def get_success_url(self):
-        return reverse('todo_list')
+        return reverse('todo_main')
 
 
 class LogDeleteView(View):
