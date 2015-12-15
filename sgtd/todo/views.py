@@ -54,8 +54,9 @@ class LogDeleteView(View):
     def post(self, request, *args, **kwargs):
         form = LogForm(request.POST)
         if form.is_valid():
-            Log.objects.filter(todo_id=form.cleaned_data['todo'],
-                    date__gte=form.cleaned_data['date']).delete()
+            Log.objects.filter(
+                    todo_id=form.cleaned_data['todo'],
+                    date=form.cleaned_data['date']).delete()
 
             last_date = (Log.objects.filter(todo_id=form.cleaned_data['todo'])
                     .aggregate(Max('date'))['date__max'])
