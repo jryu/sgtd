@@ -6,11 +6,12 @@ class Todo(models.Model):
     datetime_update = models.DateTimeField(auto_now=True)
     datetime_create = models.DateTimeField(auto_now_add=True)
 
-    def hello(self):
-        return 'world'
-
     def __unicode__(self):
         return self.text
+
+    class Meta:
+        ordering = ['text']
+
 
 class Log(models.Model):
     datetime_create = models.DateTimeField(auto_now_add=True)
