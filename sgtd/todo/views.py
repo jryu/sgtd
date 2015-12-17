@@ -45,6 +45,7 @@ class AjaxableResponseMixin(object):
 
 class LogCreateView(AjaxableResponseMixin, CreateView):
     model = Log
+    fields = ['date', 'todo']
 
     def get_success_url(self):
         return reverse('todo_main')
@@ -106,7 +107,12 @@ class BackToEditListMixin(object):
         return reverse('todo_edit_list')
 
 
-class TodoUpdateView(BackToEditListMixin, generic.UpdateView):
+class EditableTodoFieldsMixin(object):
+    fields = ['text']
+
+
+class TodoUpdateView(BackToEditListMixin, EditableTodoFieldsMixin,
+        generic.UpdateView):
     model = Todo
 
 
@@ -114,5 +120,6 @@ class TodoDeleteView(BackToEditListMixin, generic.DeleteView):
     model = Todo
 
 
-class TodoCreateView(BackToEditListMixin, generic.edit.CreateView):
+class TodoCreateView(BackToEditListMixin, EditableTodoFieldsMixin,
+        generic.edit.CreateView):
     model = Todo
