@@ -1,0 +1,25 @@
+{% extends "todo_base.html" %}
+
+{% block header %}
+<h1>Delete</h1>
+<a href="{% url 'todo_main' %}" data-icon='home' class='ui-btn-right'>Main</a>
+{% endblock %}
+
+{% block content %}
+Do you want to delete <strong>{{ object }}</strong>?
+<form action="" method="post">
+  {% csrf_token %}
+  <div class="ui-grid-a">
+    <div class="ui-block-a">
+      <a data-rel="back" class="ui-btn ui-btn-icon-left ui-icon-carat-l">
+        Cancel
+      </a>
+    </div>
+    <div class="ui-block-b">
+      <button
+          class="ui-btn ui-btn-icon-left ui-icon-delete ui-shadow-icon ui-btn-b"
+          type="submit">Yes</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

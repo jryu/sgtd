@@ -94,3 +94,25 @@ class TodoDayArchiveView(DayArchiveView):
             log__date__day=self.get_day()))
 
         return context
+
+
+class TodoListView(generic.ListView):
+    model = Todo
+    template_name = "todo/todo_edit_list.html"
+
+
+class BackToEditListMixin(object):
+    def get_success_url(self):
+        return reverse('todo_edit_list')
+
+
+class TodoUpdateView(BackToEditListMixin, generic.UpdateView):
+    model = Todo
+
+
+class TodoDeleteView(BackToEditListMixin, generic.DeleteView):
+    model = Todo
+
+
+class TodoCreateView(BackToEditListMixin, generic.edit.CreateView):
+    model = Todo
