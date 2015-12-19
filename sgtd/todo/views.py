@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.core.urlresolvers import reverse
 from django.db.models import Max
 from django.http import JsonResponse
@@ -123,3 +125,41 @@ class TodoDeleteView(BackToEditListMixin, generic.DeleteView):
 class TodoCreateView(BackToEditListMixin, EditableTodoFieldsMixin,
         generic.edit.CreateView):
     model = Todo
+
+
+class TodoTrendView(generic.ListView, generic.dates.YearMixin,
+        generic.dates.MonthMixin, generic.dates.DayMixin):
+    model = Todo
+    template_name = "todo/trend.html"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(generic.ListView, self).get_context_data(**kwargs)
+
+        today = date(
+                int(self.get_year()),
+                int(self.get_month()),
+                int(self.get_day()))
+        last_week = today - timedelta(days=6)
+
+        logs = Log.objects.filter(date__gte=last_week)
+        todo_list = context['object_list']
+
+        data = []
+        i = last_week
+        while i <= today:
+            check_list = []
+            for todo in todo_list:
+                if logs.filter(todo__pk=todo.pk, date=i):
+                    check_list.append(1)
+                else:
+                    check_list.append(0)
+
+            data.append({
+                'date': i.strftime('%m/%d'),
+                'check_list': check_list})
+
+            i += timedelta(days=1)
+
+        context['data'] = data
+        return context
