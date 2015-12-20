@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from things import views
 from things.models import Thing
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='main_page.html'), name='main'),
 
@@ -58,4 +58,4 @@ urlpatterns = patterns('',
     # Delete
     url(r'^thing/(?P<pk>\d+)/delete/$', views.ThingDeleteView.as_view(),
         name='thing_delete'),
-)
+]

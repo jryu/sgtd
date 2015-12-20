@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from todo import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.MainView.as_view(), name='todo_main'),
     url(r'^check/$', views.LogCreateView.as_view(), name='todo_check'),
     url(r'^uncheck/$', views.LogDeleteView.as_view(), name='todo_uncheck'),
@@ -12,4 +12,4 @@ urlpatterns = patterns('',
     url(r'^create/$', views.TodoCreateView.as_view(), name='todo_create'),
     url(r'^update/(?P<pk>\d+)$', views.TodoUpdateView.as_view(), name='todo_update'),
     url(r'^delete/(?P<pk>\d+)$', views.TodoDeleteView.as_view(), name='todo_delete'),
-)
+]
