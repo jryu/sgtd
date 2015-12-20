@@ -1,0 +1,48 @@
+{% extends "todo_base.html" %}
+
+{% block script %}
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script>
+    google.load('visualization', '1', {packages: ['corechart', 'bar']});
+    google.setOnLoadCallback(draw);
+
+    $(function() {
+      $(window).on('throttledresize', draw);
+    });
+
+    function draw() {
+      var data = new google.visualization.arrayToDataTable([
+        ['',
+        {% for todo in todo_list %}
+          '{{ todo }}',
+        {% endfor %}
+        ],
+
+        {% for row in data %}
+          ['{{ row.date }}',
+          {% for col in row.check_list %}
+            {{ col }},
+          {% endfor %}
+          ],
+        {% endfor %}
+        ]);
+      var options = {
+        legend: { position: 'top', maxLines: 3 },
+        bar: { groupWidth: '80%' },
+        isStacked: true,
+      };
+
+      var chart = new google.visualization.ColumnChart($('#chart_div').get(0));
+      chart.draw(data, options);
+    }
+  </script>
+{% endblock %}
+
+{% block header %}
+  <h1>Trend</h1>
+  <a href="{% url 'todo_main' %}" data-icon='home' class='ui-btn-right'>Main</a>
+{% endblock %}
+
+{% block content %}
+  <div id="chart_div"></div>
+{% endblock %}

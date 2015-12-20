@@ -23,6 +23,15 @@
     {% endfor %}
   });
 
+  function openTrend() {
+    var today = new Date(TODAY.getTime());
+    window.open(['/todo/trend',
+                 today.getFullYear(),
+                 today.getMonth() + 1,
+                 today.getDate()].join('/'),
+                '_self');
+  };
+
   function openYesterday() {
     var yesterday = new Date(TODAY.getTime());
     yesterday.setDate(yesterday.getDate() - 1);
@@ -30,7 +39,7 @@
                  yesterday.getFullYear(),
                  yesterday.getMonth() + 1,
                  yesterday.getDate()].join('/'),
-		 '_self');
+                '_self');
   };
 </script>
 
@@ -41,10 +50,11 @@
 
 {% block header %}
   <h1>Today <span></span></h1>
-  <a href="#popupMenu" data-rel="popup" data-icon='edit' class="ui-btn-right ">Edit</a>
+  <a href="#popupMenu" data-rel="popup" data-icon='gear' class="ui-btn-right ">Settings</a>
   <div data-role="popup" id="popupMenu" data-theme="b">
     <ul data-role="listview" data-inset="true" style="min-width:210px;">
       <li><a href="{% url 'todo_edit_list' %}" class="ui-btn ui-btn-icon-left ui-icon-bullets">Edit List</a></li>
+      <li><a onclick="openTrend()" href="#" class="ui-btn ui-btn-icon-left ui-icon-eye">View Trend</a></li>
       <li><a onclick="openYesterday()" href="#" class="ui-btn ui-btn-icon-left ui-icon-clock">Amend History</a></li>
     </ul>
   </div>
