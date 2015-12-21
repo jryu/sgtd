@@ -12,7 +12,7 @@ from .models import Log, Todo
 from .forms import LogForm
 
 
-class MainView(generic.ListView):
+class Main(generic.ListView):
     def get_queryset(self):
         return (Todo.objects.annotate(last_date=Max('log__date'))
                 .order_by('last_date'))
@@ -45,7 +45,7 @@ class AjaxableResponseMixin(object):
             return response
 
 
-class LogCreateView(AjaxableResponseMixin, CreateView):
+class LogCreate(AjaxableResponseMixin, CreateView):
     model = Log
     fields = ['date', 'todo']
 
@@ -53,7 +53,7 @@ class LogCreateView(AjaxableResponseMixin, CreateView):
         return reverse('todo_main')
 
 
-class LogDeleteView(View):
+class LogDelete(View):
     def post(self, request, *args, **kwargs):
         form = LogForm(request.POST)
         if form.is_valid():
@@ -75,7 +75,7 @@ class LogDeleteView(View):
             return JsonResponse(response)
 
 
-class TodoDayArchiveView(DayArchiveView):
+class TodoDayArchive(DayArchiveView):
     queryset = Log.objects.none()
     date_field = 'date'
     allow_empty = True
@@ -99,7 +99,7 @@ class TodoDayArchiveView(DayArchiveView):
         return context
 
 
-class TodoListView(generic.ListView):
+class TodoList(generic.ListView):
     model = Todo
     template_name = "todo/todo_edit_list.html"
 
@@ -113,21 +113,21 @@ class EditableTodoFieldsMixin(object):
     fields = ['text']
 
 
-class TodoUpdateView(BackToEditListMixin, EditableTodoFieldsMixin,
+class TodoUpdate(BackToEditListMixin, EditableTodoFieldsMixin,
         generic.UpdateView):
     model = Todo
 
 
-class TodoDeleteView(BackToEditListMixin, generic.DeleteView):
+class TodoDelete(BackToEditListMixin, generic.DeleteView):
     model = Todo
 
 
-class TodoCreateView(BackToEditListMixin, EditableTodoFieldsMixin,
+class TodoCreate(BackToEditListMixin, EditableTodoFieldsMixin,
         generic.edit.CreateView):
     model = Todo
 
 
-class TodoTrendView(generic.ListView, generic.dates.YearMixin,
+class TodoTrend(generic.ListView, generic.dates.YearMixin,
         generic.dates.MonthMixin, generic.dates.DayMixin):
     model = Todo
     template_name = "todo/trend.html"
