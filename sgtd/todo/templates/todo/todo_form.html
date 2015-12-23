@@ -1,7 +1,7 @@
 {% extends "todo_base.html" %}
 
 {% block header %}
-<h1>Todo Item</h1>
+<h1>Checklist Item</h1>
 <a data-rel="back" data-icon='carat-l' class='ui-btn-left'>Back</a>
 <a href="{% url 'todo_main' %}" data-icon='home' class='ui-btn-right'>Main</a>
 {% endblock %}
@@ -17,6 +17,6 @@
     {{ field.errors }}
     {{ field }}
   {% endfor %}
-  <button class="ui-shadow ui-btn ui-corner-all" type="submit">Submit</button>
+  <button class="ui-shadow ui-btn ui-corner-all ui-btn-b" type="submit">Submit</button>
 </form>
 {% endblock %}

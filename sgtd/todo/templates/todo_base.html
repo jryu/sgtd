@@ -50,12 +50,14 @@
 	</div><!-- /content -->
 
 	<div data-role="footer">
+		{% block footer %}
 		<h2>
 			{% if user.is_authenticated %}
 				{{ user.get_full_name }} |
 				<a href="{% url 'account_logout' %}?next=todo_main">Log out</a>
 			{% endif %}
 		</h2>
+		{% endblock %}
 	</div><!-- /footer -->
 
 </div><!-- /page -->

@@ -16,7 +16,7 @@
         {{ next_day.year }}, {{ next_day.month }}, {{ next_day.day }});
 
     if (TODAY <= nextDay) {
-	$('#next-day-btn').addClass('ui-state-disabled').text('N/A');
+      $('#next-day-btn').addClass('ui-state-disabled').text('N/A');
     }
 
     TODAY = createDate({{ day.year }}, {{ day.month }}, {{ day.day }});
@@ -52,7 +52,7 @@
 {% block content %}
   <ul data-role="listview" data-count-theme="b" data-inset="true">
   {% for todo in checked_list %}
-    <li data-icon="check"><a id="btn-{{ todo.pk }}"
+    <li data-icon="check" data-theme="b"><a id="btn-{{ todo.pk }}"
         onclick="toggle({{ todo.pk }})" href="#">{{ todo }}</a></li>
   {% endfor %}
 

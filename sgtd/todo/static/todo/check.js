@@ -14,16 +14,16 @@ function setLastDate(id, lastDate) {
   var buttonElement = $('#btn-' + id);
   var deltaElement = $('#delta-' + id);
   if (!lastDate) {
-    buttonElement.buttonMarkup({icon: 'plus'});
+    buttonElement.buttonMarkup({icon: 'plus', theme: null});
 
     deltaElement.text('New');
     deltaElement.show();
   } else if (lastDate >= TODAY) {
-    buttonElement.buttonMarkup({icon: 'check'});
+    buttonElement.buttonMarkup({icon: 'check', theme: 'b'});
 
     deltaElement.hide();
   } else {
-    buttonElement.buttonMarkup({icon: 'plus'});
+    buttonElement.buttonMarkup({icon: 'plus', theme: null});
 
     var delta = (TODAY - lastDate) / (1000 * 60 * 60 * 24);
     if (delta == 1) {

@@ -1,7 +1,7 @@
 {% extends "todo_base.html" %}
 
 {% block header %}
-  <h1>Edit Todo List</h1>
+  <h1>Edit Checklist</h1>
   <a href="{% url 'todo_main' %}" data-icon='home' class='ui-btn-right'>Main</a>
 {% endblock %}
 
@@ -10,11 +10,14 @@
   <ul data-role="listview" data-split-icon="delete">
     <li>
       <button onclick="window.open('{% url 'todo_create' %}', '_self')"
-          class="ui-btn ui-icon-plus ui-btn-icon-left">Add New Item</button>
+          class="ui-btn ui-icon-plus ui-btn-icon-left ui-corner-all">Add New Item</button>
     </li>
   {% for todo in object_list %}
     <li>
-      <a href="{% url 'todo_update' todo.pk %}">{{ todo }}</a>
+      <a href="{% url 'todo_update' todo.pk %}">
+        <img src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/images/icons-png/edit-black.png"
+             class="ui-li-icon" />{{ todo }}
+      </a>
       <a href="{% url 'todo_delete' todo.pk %}">Delete</a>
     </li>
   {% endfor %}
