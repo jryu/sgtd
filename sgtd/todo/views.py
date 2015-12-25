@@ -14,7 +14,9 @@ from .forms import LogForm
 
 class Main(generic.ListView):
     def get_queryset(self):
-        return (Todo.objects.annotate(last_date=Max('log__date'))
+        return (Todo.objects
+                .filter(created_by=self.request.user)
+                .annotate(last_date=Max('log__date'))
                 .order_by('last_date'))
 
 
@@ -49,6 +51,10 @@ class LogCreate(AjaxableResponseMixin, CreateView):
     model = Log
     fields = ['date', 'todo']
 
+    def form_valid(self, form):
+        if form.instance.todo.created_by == self.request.user:
+            return super(LogCreate, self).form_valid(form)
+
     def get_success_url(self):
         return reverse('todo_main')
 
@@ -57,11 +63,15 @@ class LogDelete(View):
     def post(self, request, *args, **kwargs):
         form = LogForm(request.POST)
         if form.is_valid():
-            Log.objects.filter(
+            default_queryset = Log.objects.filter(
+                    todo__created_by = self.request.user)
+
+            default_queryset.filter(
                     todo_id=form.cleaned_data['todo'],
                     date=form.cleaned_data['date']).delete()
 
-            last_date = (Log.objects.filter(todo_id=form.cleaned_data['todo'])
+            last_date = (default_queryset
+                    .filter(todo_id=form.cleaned_data['todo'])
                     .aggregate(Max('date'))['date__max'])
 
             response = {
@@ -85,13 +95,15 @@ class TodoDayArchive(DayArchiveView):
         # Call the base implementation first to get a context
         context = super(DayArchiveView, self).get_context_data(**kwargs)
 
-        context['checked_list'] = (Todo.objects.filter(
+        default_queryset = Todo.objects.filter(created_by=self.request.user)
+
+        context['checked_list'] = (default_queryset.filter(
             log__date__year=self.get_year(),
             log__date__month=self.get_month(),
             log__date__day=self.get_day())
             .order_by('log__date').distinct())
 
-        context['unchecked_list'] = (Todo.objects.exclude(
+        context['unchecked_list'] = (default_queryset.exclude(
             log__date__year=self.get_year(),
             log__date__month=self.get_month(),
             log__date__day=self.get_day()))
@@ -99,9 +111,13 @@ class TodoDayArchive(DayArchiveView):
         return context
 
 
-class TodoList(generic.ListView):
-    model = Todo
-    template_name = "todo/todo_edit_list.html"
+class TodoMixin(object):
+    def get_queryset(self):
+        return Todo.objects.filter(created_by=self.request.user)
+
+
+class EditableTodoFieldsMixin(object):
+    fields = ['text']
 
 
 class BackToEditListMixin(object):
@@ -109,27 +125,34 @@ class BackToEditListMixin(object):
         return reverse('todo_edit_list')
 
 
-class EditableTodoFieldsMixin(object):
-    fields = ['text']
+class TodoList(TodoMixin, generic.ListView):
+    template_name = "todo/todo_edit_list.html"
 
 
-class TodoUpdate(BackToEditListMixin, EditableTodoFieldsMixin,
+class TodoUpdate(TodoMixin, EditableTodoFieldsMixin, BackToEditListMixin,
         generic.UpdateView):
-    model = Todo
+    """
+    Too Easy
+    """
 
 
-class TodoDelete(BackToEditListMixin, generic.DeleteView):
-    model = Todo
+class TodoDelete(TodoMixin, BackToEditListMixin, generic.DeleteView):
+    """
+    Too Easy
+    """
 
 
-class TodoCreate(BackToEditListMixin, EditableTodoFieldsMixin,
+class TodoCreate(EditableTodoFieldsMixin, BackToEditListMixin,
         generic.edit.CreateView):
     model = Todo
 
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super(TodoCreate, self).form_valid(form)
 
-class TodoTrend(generic.ListView, generic.dates.YearMixin,
-        generic.dates.MonthMixin, generic.dates.DayMixin):
-    model = Todo
+
+class TodoTrend(TodoMixin, generic.dates.YearMixin, generic.dates.MonthMixin,
+        generic.dates.DayMixin, generic.ListView):
     template_name = "todo/trend.html"
 
     def get_context_data(self, **kwargs):
@@ -142,7 +165,8 @@ class TodoTrend(generic.ListView, generic.dates.YearMixin,
                 int(self.get_day()))
         last_week = today - timedelta(days=6)
 
-        logs = Log.objects.filter(date__gte=last_week)
+        logs = Log.objects.filter(
+                todo__created_by = self.request.user, date__gte=last_week)
         todo_list = context['object_list']
 
         data = []
